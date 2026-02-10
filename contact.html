@@ -63,7 +63,6 @@
             <ul class="infoList">
               <li>주차: 교회 주차장 이용 가능(혼잡 시 인근 공영주차장 이용)</li>
               <li>대중교통: 가까운 정류장/역에서 도보 이동(필요 시 문구 수정)</li>
-              <li>처음 오시는 분은 1층 안내 데스크로 문의해주세요.</li>
             </ul>
           </div>
 
@@ -78,58 +77,48 @@
     </div>
   </footer>
 
-  <!-- ✅ 네이버 지도 SDK (ncpClientId를 본인 키로 교체) -->
-  <script
-  src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=df16m2rszv&submodules=geocoder">
-</script>
+  <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=df16m2rszv"></script>
 
   <script>
-    // 교회 주소
-    const CHURCH_ADDRESS = "대구광역시 달서구 감삼남1길 9";
+  const CHURCH_NAME = "서대구교회";
+  const CHURCH_ADDRESS = "대구광역시 달서구 감삼남1길 9";
 
-    // 기본 지도(좌표는 임시값 → 주소로 좌표 변환 후 자동 이동)
-    const map = new naver.maps.Map("map", {
-      center: new naver.maps.LatLng(35.85, 128.56),
-      zoom: 15,
-      zoomControl: true
-    });
+  // ✅ 고정 좌표 (너가 준 값)
+  const LAT = 35.848148162889885;
+  const LNG = 128.5390166430412;
 
-    // 주소 → 좌표(Geocoding) 후 마커 표시
-    naver.maps.Service.geocode({ query: CHURCH_ADDRESS }, function(status, response) {
-      if (status !== naver.maps.Service.Status.OK) {
-        console.warn("주소를 찾을 수 없습니다:", status);
-        return;
-      }
+  const position = new naver.maps.LatLng(LAT, LNG);
 
-      const result = response.v2.addresses[0];
-      if (!result) return;
+  const map = new naver.maps.Map("map", {
+    center: position,
+    zoom: 16,
+    zoomControl: true,
+    zoomControlOptions: {
+      position: naver.maps.Position.TOP_RIGHT
+    }
+  });
 
-      const lat = parseFloat(result.y);
-      const lng = parseFloat(result.x);
-      const position = new naver.maps.LatLng(lat, lng);
+  const marker = new naver.maps.Marker({
+    position,
+    map
+  });
 
-      map.setCenter(position);
+  const infowindow = new naver.maps.InfoWindow({
+    content: `
+      <div style="padding:10px 12px; font-size:13px; line-height:1.35;">
+        <strong>${CHURCH_NAME}</strong><br/>
+        ${CHURCH_ADDRESS}
+      </div>
+    `
+  });
 
-      const marker = new naver.maps.Marker({
-        position,
-        map
-      });
+  infowindow.open(map, marker);
 
-      const infowindow = new naver.maps.InfoWindow({
-        content: `
-          <div style="padding:10px 12px; font-size:13px; line-height:1.3;">
-            <strong>서대구감리교회</strong><br/>
-            ${CHURCH_ADDRESS}
-          </div>
-        `
-      });
+  naver.maps.Event.addListener(marker, "click", () => {
+    if (infowindow.getMap()) infowindow.close();
+    else infowindow.open(map, marker);
+  });
+</script>
 
-      infowindow.open(map, marker);
-      naver.maps.Event.addListener(marker, "click", () => {
-        if (infowindow.getMap()) infowindow.close();
-        else infowindow.open(map, marker);
-      });
-    });
-  </script>
 </body>
 </html>
