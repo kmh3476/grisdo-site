@@ -14,7 +14,7 @@ export default async (req) => {
 
     // 네이버 Static Map (서버용 raster)
     const naverUrl =
-      `https://naveropenapi.apigw-pub.fin-ntruss.com/map-static/v2/raster` +
+      `https://naveropenapi.apigw.ntruss.com/map-static/v2/raster?` +
       `?w=${encodeURIComponent(w)}` +
       `&h=${encodeURIComponent(h)}` +
       `&center=${encodeURIComponent(center)}` +
