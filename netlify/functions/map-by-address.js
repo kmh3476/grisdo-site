@@ -22,7 +22,7 @@ exports.handler = async (event) => {
 
     // 1) Geocode: 주소 -> x(경도), y(위도)
     const geocodeUrl =
-      `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(address)}`;
+      `https://naveropenapi.apigw-pub.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(address)}`;
 
     const gResp = await fetch(geocodeUrl, {
       headers: {
