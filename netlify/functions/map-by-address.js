@@ -32,12 +32,35 @@ exports.handler = async (event) => {
     });
 
     const gText = await gResp.text();
-    if (!gResp.ok) {
-      // 지오코딩 실패 원인 그대로 보여주기 (디버그용)
-      return { statusCode: gResp.status, body: gText };
-    }
 
-    const gJson = JSON.parse(gText);
+// 디버그: 지오코딩 응답이 비거나 JSON이 아닐 때 그대로 보여주기
+if (!gText || !gText.trim()) {
+  return {
+    statusCode: 502,
+    body: `Geocode empty body
+status=${gResp.status}
+content-type=${gResp.headers.get("content-type")}
+address=${address}`,
+  };
+}
+
+if (!gResp.ok) {
+  return { statusCode: gResp.status, body: gText };
+}
+
+let gJson;
+try {
+  gJson = JSON.parse(gText);
+} catch (e) {
+  return {
+    statusCode: 502,
+    body: `Geocode non-JSON response
+status=${gResp.status}
+content-type=${gResp.headers.get("content-type")}
+body=${gText.slice(0, 300)}`,
+  };
+}
+
     const first = gJson.addresses && gJson.addresses[0];
     if (!first) {
       return { statusCode: 404, body: `No geocode result for: ${address}` };
