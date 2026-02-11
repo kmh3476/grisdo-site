@@ -1,39 +1,52 @@
-export default async (req) => {
-  try {
-    const url = new URL(req.url);
-    const address = url.searchParams.get("address");
-    if (!address) return new Response("Missing address", { status: 400 });
+// netlify/functions/map-by-address.js
+// CommonJS Netlify Function (가장 호환 잘 됨)
 
-    const w = url.searchParams.get("w") || "800";
-    const h = url.searchParams.get("h") || "450";
-    const level = url.searchParams.get("level") || "16";
+exports.handler = async (event) => {
+  try {
+    const qs = event.queryStringParameters || {};
+    const address = qs.address;
+    if (!address) {
+      return { statusCode: 400, body: "Missing address" };
+    }
+
+    const w = qs.w || "800";
+    const h = qs.h || "450";
+    const level = qs.level || "16";
 
     const keyId = process.env.NCP_MAPS_CLIENT_ID;
     const key = process.env.NCP_MAPS_CLIENT_SECRET;
-    if (!keyId || !key) return new Response("Missing NCP credentials", { status: 500 });
 
-    // 1) Geocoding (주소 -> x(경도), y(위도))
+    if (!keyId || !key) {
+      return { statusCode: 500, body: "Missing NCP credentials (env vars)" };
+    }
+
+    // 1) Geocode: 주소 -> x(경도), y(위도)
     const geocodeUrl =
       `https://maps.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(address)}`;
 
-    const g = await fetch(geocodeUrl, {
+    const gResp = await fetch(geocodeUrl, {
       headers: {
         "x-ncp-apigw-api-key-id": keyId,
         "x-ncp-apigw-api-key": key,
       },
     });
 
-    const gText = await g.text();
-    if (!g.ok) return new Response(gText, { status: g.status });
+    const gText = await gResp.text();
+    if (!gResp.ok) {
+      // 지오코딩 실패 원인 그대로 보여주기 (디버그용)
+      return { statusCode: gResp.status, body: gText };
+    }
 
     const gJson = JSON.parse(gText);
-    const first = gJson.addresses?.[0];
-    if (!first) return new Response("No geocode result", { status: 404 });
+    const first = gJson.addresses && gJson.addresses[0];
+    if (!first) {
+      return { statusCode: 404, body: `No geocode result for: ${address}` };
+    }
 
     const lon = first.x; // 경도
     const lat = first.y; // 위도
 
-    // 2) Static Map 이미지
+    // 2) Static Map (이미지)
     const center = `${lon},${lat}`;
     const markerPos = `${lon} ${lat}`;
 
@@ -45,27 +58,32 @@ export default async (req) => {
       `&level=${encodeURIComponent(level)}` +
       `&markers=${encodeURIComponent(`type:d|size:mid|pos:${markerPos}`)}`;
 
-    const m = await fetch(mapUrl, {
+    const mResp = await fetch(mapUrl, {
       headers: {
         "x-ncp-apigw-api-key-id": keyId,
         "x-ncp-apigw-api-key": key,
       },
     });
 
-    if (!m.ok) {
-      const t = await m.text();
-      return new Response(t, { status: m.status });
+    if (!mResp.ok) {
+      const t = await mResp.text();
+      return { statusCode: mResp.status, body: t };
     }
 
-    const buf = await m.arrayBuffer();
-    return new Response(buf, {
-      status: 200,
+    // Netlify Functions는 바이너리 반환 시 base64 필요
+    const buf = Buffer.from(await mResp.arrayBuffer());
+
+    return {
+      statusCode: 200,
+      isBase64Encoded: true,
       headers: {
-        "Content-Type": m.headers.get("content-type") || "image/png",
+        "Content-Type": mResp.headers.get("content-type") || "image/png",
         "Cache-Control": "public, max-age=86400",
       },
-    });
+      body: buf.toString("base64"),
+    };
   } catch (e) {
-    return new Response("Server error", { status: 500 });
+    // 에러 메시지를 응답으로 내보내면 원인 잡기 쉬움
+    return { statusCode: 500, body: `Server error: ${e && e.message ? e.message : String(e)}` };
   }
 };
