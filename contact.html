@@ -36,7 +36,16 @@
 
           <!-- 지도 -->
           <div class="mapCard">
-            <div id="map" class="mapBox" aria-label="서대구감리교회 지도"></div>
+            <div class="mapBox" aria-label="서대구감리교회 지도">
+  <iframe
+    class="naverMapIframe"
+    src="https://map.naver.com/p/entry/place/16259742?placePath=%2Fhome"
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    allowfullscreen
+  ></iframe>
+</div>
+
 
             <div class="mapActions">
               <a class="btn btnGhost"
@@ -76,49 +85,6 @@
       <p>© 서대구감리교회. All rights reserved.</p>
     </div>
   </footer>
-
-  <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=df16m2rszv"></script>
-
-  <script>
-  const CHURCH_NAME = "서대구교회";
-  const CHURCH_ADDRESS = "대구광역시 달서구 감삼남1길 9";
-
-  // ✅ 고정 좌표 (너가 준 값)
-  const LAT = 35.848148162889885;
-  const LNG = 128.5390166430412;
-
-  const position = new naver.maps.LatLng(LAT, LNG);
-
-  const map = new naver.maps.Map("map", {
-    center: position,
-    zoom: 16,
-    zoomControl: true,
-    zoomControlOptions: {
-      position: naver.maps.Position.TOP_RIGHT
-    }
-  });
-
-  const marker = new naver.maps.Marker({
-    position,
-    map
-  });
-
-  const infowindow = new naver.maps.InfoWindow({
-    content: `
-      <div style="padding:10px 12px; font-size:13px; line-height:1.35;">
-        <strong>${CHURCH_NAME}</strong><br/>
-        ${CHURCH_ADDRESS}
-      </div>
-    `
-  });
-
-  infowindow.open(map, marker);
-
-  naver.maps.Event.addListener(marker, "click", () => {
-    if (infowindow.getMap()) infowindow.close();
-    else infowindow.open(map, marker);
-  });
-</script>
 
 </body>
 </html>
