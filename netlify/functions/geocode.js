@@ -8,10 +8,9 @@ exports.handler = async (event) => {
     const key = process.env.NCP_MAPS_CLIENT_SECRET;
     if (!keyId || !key) return { statusCode: 500, body: "Missing NCP credentials" };
 
-    const geocodeUrl =
-      `https://maps.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(address)}`;
+    const url = `https://maps.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(address)}`;
 
-    const resp = await fetch(geocodeUrl, {
+    const resp = await fetch(url, {
       headers: {
         "x-ncp-apigw-api-key-id": keyId,
         "x-ncp-apigw-api-key": key,
@@ -19,14 +18,33 @@ exports.handler = async (event) => {
       },
     });
 
+    // 바디를 text로 한 번, 길이도 같이 확인
     const text = await resp.text();
 
+    const debug = {
+      url,
+      status: resp.status,
+      ok: resp.ok,
+      contentType: resp.headers.get("content-type"),
+      contentLength: resp.headers.get("content-length"),
+      server: resp.headers.get("server"),
+      date: resp.headers.get("date"),
+      // 일부 요청은 request id 헤더가 붙어오기도 함
+      requestId: resp.headers.get("x-ncp-apigw-request-id") || resp.headers.get("x-request-id"),
+      bodyLength: text.length,
+      bodyPreview: text.slice(0, 500),
+    };
+
     return {
-      statusCode: resp.status,
-      headers: { "content-type": resp.headers.get("content-type") || "text/plain; charset=utf-8" },
-      body: text || "(empty body)",
+      statusCode: 200, // 디버그는 항상 200으로 내려서 브라우저에서 잘 보이게
+      headers: { "content-type": "application/json; charset=utf-8" },
+      body: JSON.stringify(debug, null, 2),
     };
   } catch (e) {
-    return { statusCode: 500, body: `fetch failed: ${e && e.message ? e.message : String(e)}` };
+    return {
+      statusCode: 200,
+      headers: { "content-type": "application/json; charset=utf-8" },
+      body: JSON.stringify({ error: "fetch failed", message: e?.message || String(e) }, null, 2),
+    };
   }
 };
