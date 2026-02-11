@@ -14,7 +14,7 @@ export default async (req) => {
 
     // 네이버 Static Map (서버용 raster)
     const naverUrl =
-      `https://naveropenapi.apigw.ntruss.com/map-static/v2/raster?` +
+      `https://maps.apigw.ntruss.com/map-static/v2/raster` +
       `?w=${encodeURIComponent(w)}` +
       `&h=${encodeURIComponent(h)}` +
       `&center=${encodeURIComponent(center)}` +
@@ -30,9 +30,10 @@ export default async (req) => {
 
     const resp = await fetch(naverUrl, {
       headers: {
-        "X-NCP-APIGW-API-KEY-ID": clientId,
-        "X-NCP-APIGW-API-KEY": clientSecret,
-      },
+  "x-ncp-apigw-api-key-id": clientId,
+  "x-ncp-apigw-api-key": clientSecret,
+}
+,
     });
 
     if (!resp.ok) {
