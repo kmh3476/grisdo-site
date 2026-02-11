@@ -597,6 +597,14 @@ a{ color:inherit; text-decoration:none; }
   background-position: center 35%;
 }
 
+.staticMapImg{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover; /* 박스 비율 유지하며 꽉 채움 */
+  border: 0;
+}
+
 .mapBox{
   width: 100%;
   height: 420px;           /* 원하는 높이 */
