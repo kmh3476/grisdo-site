@@ -45,6 +45,16 @@ exports.handler = async (event) => {
       ),
     };
   } catch (e) {
-    return { statusCode: 500, body: `Server error: ${e?.message || String(e)}` };
-  }
+  return {
+    statusCode: 500,
+    headers: { "content-type": "text/plain; charset=utf-8" },
+    body: `Server error: ${e?.message || String(e)}`
+  };
+}
+
+if (!keyId || !key) {
+  return { statusCode: 500, body: "Missing NCP credentials: NCP_MAPS_CLIENT_ID / NCP_MAPS_CLIENT_SECRET" };
+}
+
+
 };

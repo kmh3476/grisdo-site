@@ -88,29 +88,31 @@
 (async () => {
   const address = "대구광역시 달서구 감삼남1길 9 서대구교회";
 
-  // 1) 서버(Netlify Function)로 지오코딩 요청 (Secret 숨김)
   const res = await fetch(`/.netlify/functions/geocode?address=${encodeURIComponent(address)}`);
-  const data = await res.json();
 
-  if (data.status !== "OK") {
-    console.error("Geocode failed:", data);
-    // 실패 시 기본 좌표로라도 보여주기(선택)
+  const text = await res.text();
+  if (!res.ok) {
+    console.error("Geocode HTTP error:", res.status, text);
     return;
   }
 
-  const latLng = new naver.maps.LatLng(data.lat, data.lon);
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch (e) {
+    console.error("Geocode returned non-JSON:", text);
+    return;
+  }
 
-  // 2) 지도 생성
-  const map = new naver.maps.Map("map", {
-    center: latLng,
-    zoom: 16,
-  });
+  if (data.status !== "OK") {
+    console.error("Geocode failed:", data);
+    return;
+  }
 
-  // 3) 마커
-  new naver.maps.Marker({
-    position: latLng,
-    map: map,
-  });
+  // 네이버 지도 SDK 인증이 성공한 뒤에만 아래가 돌아야 함
+  const center = new naver.maps.LatLng(data.lat, data.lon);
+  const map = new naver.maps.Map("map", { center, zoom: 16 });
+  new naver.maps.Marker({ position: center, map });
 })();
 </script>
 
