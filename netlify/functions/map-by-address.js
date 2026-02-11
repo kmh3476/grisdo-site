@@ -12,7 +12,7 @@ export default async (req) => {
     const key = process.env.NCP_MAPS_CLIENT_SECRET;
     if (!keyId || !key) return new Response("Missing NCP credentials", { status: 500 });
 
-    // 1) Geocoding: address -> (x,y)  (x=경도, y=위도)
+    // 1) Geocoding (주소 -> x(경도), y(위도))
     const geocodeUrl =
       `https://maps.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(address)}`;
 
@@ -33,7 +33,7 @@ export default async (req) => {
     const lon = first.x; // 경도
     const lat = first.y; // 위도
 
-    // 2) Static Map (이미지)
+    // 2) Static Map 이미지
     const center = `${lon},${lat}`;
     const markerPos = `${lon} ${lat}`;
 
