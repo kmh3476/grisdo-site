@@ -624,3 +624,7 @@ a{ color:inherit; text-decoration:none; }
   .mapBox{ height: 320px; }
 }
 
+.naverMap {
+  width: 100%;
+  height: 100%;
+}

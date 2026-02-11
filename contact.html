@@ -36,14 +36,10 @@
 
           <!-- 지도 -->
           <div class="mapCard">
-            <div class="mapBox" aria-label="서대구감리교회 지도">
-  <img
-    class="staticMapImg"
-    loading="lazy"
-    alt="서대구감리교회 위치 정적 지도"
-    src="/.netlify/functions/map-by-address?address=%EB%8C%80%EA%B5%AC%EA%B4%91%EC%97%AD%EC%8B%9C%20%EB%8B%AC%EC%84%9C%EA%B5%AC%20%EA%B0%90%EC%82%BC%EB%82%A81%EA%B8%B8%209%20%EC%84%9C%EB%8C%80%EA%B5%AC%EA%B5%90%ED%9A%8C&w=800&h=450&level=16"
-/>
+           <div class="mapBox" aria-label="서대구감리교회 지도">
+  <div id="map" class="naverMap"></div>
 </div>
+
 
 
 
@@ -85,6 +81,39 @@
       <p>© 서대구감리교회. All rights reserved.</p>
     </div>
   </footer>
+
+  <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=네이버_JS_CLIENT_ID"></script>
+
+  <script>
+(async () => {
+  const address = "대구광역시 달서구 감삼남1길 9 서대구교회";
+
+  // 1) 서버(Netlify Function)로 지오코딩 요청 (Secret 숨김)
+  const res = await fetch(`/.netlify/functions/geocode?address=${encodeURIComponent(address)}`);
+  const data = await res.json();
+
+  if (data.status !== "OK") {
+    console.error("Geocode failed:", data);
+    // 실패 시 기본 좌표로라도 보여주기(선택)
+    return;
+  }
+
+  const latLng = new naver.maps.LatLng(data.lat, data.lon);
+
+  // 2) 지도 생성
+  const map = new naver.maps.Map("map", {
+    center: latLng,
+    zoom: 16,
+  });
+
+  // 3) 마커
+  new naver.maps.Marker({
+    position: latLng,
+    map: map,
+  });
+})();
+</script>
+
 
 </body>
 </html>
