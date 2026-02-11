@@ -82,39 +82,42 @@
     </div>
   </footer>
 
-  <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=df16m2rszv"></script>
-
   <script>
-(async () => {
-  const address = "대구광역시 달서구 감삼남1길 9 서대구교회";
-
-  const res = await fetch(`/.netlify/functions/geocode?address=${encodeURIComponent(address)}`);
-
-  const text = await res.text();
-  if (!res.ok) {
-    console.error("Geocode HTTP error:", res.status, text);
-    return;
-  }
-
-  let data;
-  try {
-    data = JSON.parse(text);
-  } catch (e) {
-    console.error("Geocode returned non-JSON:", text);
-    return;
-  }
-
-  if (data.status !== "OK") {
-    console.error("Geocode failed:", data);
-    return;
-  }
-
-  // 네이버 지도 SDK 인증이 성공한 뒤에만 아래가 돌아야 함
-  const center = new naver.maps.LatLng(data.lat, data.lon);
-  const map = new naver.maps.Map("map", { center, zoom: 16 });
-  new naver.maps.Marker({ position: center, map });
-})();
 </script>
+
+
+<script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=i3cudqbh44"></script>
+
+<script>
+  (function () {
+    // ✅ 고정 좌표 (위도, 경도)
+    const LAT = 35.8481402324648;
+    const LON = 128.539009627304;
+
+    // SDK 로드 실패(인증 실패) 방어
+    if (!window.naver || !naver.maps) {
+      console.error("Naver Maps SDK not loaded. Check ncpClientId + Web service URL.");
+      return;
+    }
+
+    const center = new naver.maps.LatLng(LAT, LON);
+
+    const map = new naver.maps.Map("map", {
+      center: center,
+      zoom: 16,
+      // 드래그/줌 옵션(원하면)
+      // scrollWheel: false,
+      // pinchZoom: true,
+      // draggable: true,
+    });
+
+    new naver.maps.Marker({
+      position: center,
+      map: map,
+    });
+  })();
+</script>
+
 
 
 </body>
