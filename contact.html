@@ -86,7 +86,7 @@
 </script>
 
 
-<script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=i3cudqbh44"></script>
+<script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=i3cudqbh44"></script>
 
 <script>
   (function () {
@@ -96,7 +96,7 @@
 
     // SDK 로드 실패(인증 실패) 방어
     if (!window.naver || !naver.maps) {
-      console.error("Naver Maps SDK not loaded. Check ncpClientId + Web service URL.");
+      console.error("Naver Maps SDK not loaded. Check ncpKey + Web service URL.");
       return;
     }
 
