@@ -31,25 +31,15 @@
     </section>
 
     <section class="section">
-      <div class="container">
         <div class="boardGrid">
 
-          <!-- 좌측 메뉴 -->
-          <aside class="boardSide">
-            <div class="boardSide__title">게시판</div>
+<aside class="boardSide boardSide--right">
+  <nav class="boardNav boardNav--text" aria-label="공지/주보 메뉴">
+    <a class="boardNav__item isActive" href="#notice" data-tab="notice">공지</a>
+    <a class="boardNav__item" href="#bulletin" data-tab="bulletin">주보</a>
+  </nav>
+</aside>
 
-            <nav class="boardNav" aria-label="공지/주보 메뉴">
-              <a class="boardNav__item isActive" href="#notice" data-tab="notice">공지</a>
-              <a class="boardNav__item" href="#bulletin" data-tab="bulletin">주보</a>
-            </nav>
-
-            <div class="boardActions">
-              <a class="btn btnGhost boardActions__btn" href="#" data-action="add-notice">+ 교회소식</a>
-              <a class="btn boardActions__btn" href="#" data-action="add-bulletin">+ 주보</a>
-            </div>
-          </aside>
-
-          <!-- 우측 리스트 -->
           <section class="boardMain">
             <div class="boardHead">
               <h2 id="boardTitle">공지</h2>
@@ -58,21 +48,37 @@
 
             <!-- 공지 -->
             <div class="boardList" data-pane="notice">
-              <a class="boardItem" href="#">
-                <div class="boardItem__meta">2026-02-12 · 교역자실</div>
-                <div class="boardItem__title">새가족 교육 안내</div>
-                <div class="boardItem__desc">예배 후 2층에서 진행됩니다.</div>
-              </a>
-            </div>
+  <a class="postCard" href="notice-detail.html?id=1">
+    <div class="postThumb">
+      <img src="assets/img/notice/2026-02-12.jpg" alt="새가족 교육 안내">
+    </div>
+
+    <div class="postMeta">
+      <span class="postTag">공지</span>
+      <span class="postDate">2026-02-12</span>
+    </div>
+
+    <div class="postTitle">새가족 교육 안내</div>
+  </a>
+</div>
+
 
             <!-- 주보 -->
             <div class="boardList isHidden" data-pane="bulletin">
-              <a class="boardItem" href="#">
-                <div class="boardItem__meta">2026-02-09 · PDF</div>
-                <div class="boardItem__title">2/9 주보</div>
-                <div class="boardItem__desc">주일 예배 순서 및 광고를 확인하세요.</div>
-              </a>
-            </div>
+  <a class="postCard" href="assets/bulletins/2026-02-09.pdf" target="_blank" rel="noopener">
+    <div class="postThumb">
+      <img src="assets/img/bulletins/2026-02-09.jpg" alt="2026-02-09 주보">
+    </div>
+
+    <div class="postMeta">
+      <span class="postTag">주보</span>
+      <span class="postDate">2026-02-09</span>
+    </div>
+
+    <div class="postTitle">2026년 2월 9일 주보</div>
+  </a>
+</div>
+
           </section>
 
         </div>

@@ -630,32 +630,11 @@ a{ color:inherit; text-decoration:none; }
 }
 
 /* ===== 공지/주보(게시판) 레이아웃 ===== */
-.board-page{
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 28px 16px;
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 20px;
-}
-
-.board-sidebar{
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 14px;
-  padding: 16px;
-  background: #fff;
-}
 
 .board-sidebar__title{
   font-size: 16px;
   font-weight: 800;
   margin-bottom: 12px;
-}
-
-.board-nav{
-  display: grid;
-  gap: 8px;
-  margin-bottom: 14px;
 }
 
 .board-nav__item{
@@ -673,12 +652,6 @@ a{ color:inherit; text-decoration:none; }
 .board-nav__item.is-active{
   border-color: rgba(0,0,0,0.18);
   font-weight: 800;
-}
-
-.board-actions{
-  display: grid;
-  gap: 8px;
-  margin-top: 10px;
 }
 
 .board-actions__btn{
@@ -701,13 +674,6 @@ a{ color:inherit; text-decoration:none; }
   line-height: 1.4;
 }
 
-.board-content{
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 14px;
-  padding: 16px;
-  background: #fff;
-}
-
 .board-header{
   padding: 6px 4px 14px;
   border-bottom: 1px solid rgba(0,0,0,0.08);
@@ -724,21 +690,7 @@ a{ color:inherit; text-decoration:none; }
   opacity: 0.75;
 }
 
-.board-list{
-  display: grid;
-  gap: 10px;
-}
-
 .board-list.is-hidden{ display:none; }
-
-.board-card{
-  display: block;
-  padding: 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(0,0,0,0.10);
-  text-decoration: none;
-  color: inherit;
-}
 
 .board-card__meta{
   font-size: 12px;
@@ -785,22 +737,22 @@ a{ color:inherit; text-decoration:none; }
 
 /* ===== 공지/주보 게시판 레이아웃 (기존 스타일 톤 유지용) ===== */
 .noticeHero .subHero__bg{
+   background-image: url("../img/notice-hero.jpg");
+  background-position: center 5%;
   /* contactHero처럼 배경을 따로 주고 싶으면 여기에서만 덮어쓰기 가능 */
 }
 
 /* 2열: 좌측 사이드 + 우측 리스트 */
-.boardGrid{
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 18px;
-  align-items: start;
-}
+  .boardGrid{
+    grid-template-columns: 1fr;
+  }
 
 .boardSide{
-  border: 1px solid rgba(0,0,0,0.10);
-  border-radius: 14px;
-  padding: 16px;
-  background: #fff;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius);
+  padding: 50px;
+  box-shadow: none;
 }
 
 .boardSide__title{
@@ -815,19 +767,18 @@ a{ color:inherit; text-decoration:none; }
 }
 
 .boardNav__item{
-  display: block;
   padding: 12px 12px;
   border-radius: 12px;
   text-decoration: none;
   color: inherit;
-  border: 1px solid rgba(0,0,0,0.10);
+  border: none;
   background: rgba(0,0,0,0.02);
 }
 
 .boardNav__item.isActive{
   background: #fff;
   font-weight: 800;
-  border-color: rgba(0,0,0,0.18);
+  border-color: transparent;
 }
 
 .boardActions{
@@ -841,11 +792,13 @@ a{ color:inherit; text-decoration:none; }
 }
 
 .boardMain{
-  border: 1px solid rgba(0,0,0,0.10);
-  border-radius: 14px;
-  padding: 16px;
-  background: #fff;
+  border: none;
+  border-radius: 0;
+  padding: 20px;
+  background: transparent;
+  box-shadow: none;
 }
+
 
 .boardHead{
   padding-bottom: 12px;
@@ -853,31 +806,21 @@ a{ color:inherit; text-decoration:none; }
   border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 
-.boardHead h2{
-  margin: 0 0 6px;
-}
-
-.boardHead p{
-  margin: 0;
-  opacity: 0.75;
-}
-
 .boardList{
   display: grid;
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr); /* 3개씩 */
+  gap: 28px;
 }
 
 .boardList.isHidden{ display:none; }
 
 .boardItem{
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  border: 1px solid rgba(0,0,0,0.10);
-  border-radius: 14px;
-  padding: 14px;
-  background: #fff;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 12px;
 }
+
 
 .boardItem__meta{
   font-size: 12px;
@@ -897,13 +840,194 @@ a{ color:inherit; text-decoration:none; }
 
 /* ===== 반응형: 모바일에서는 사이드바가 위로 올라가고 메뉴/버튼이 2칸 ===== */
 @media (max-width: 860px){
-  .boardGrid{
-    grid-template-columns: 1fr;
-  }
-  .boardNav{
-    grid-template-columns: 1fr 1fr;
-  }
   .boardActions{
     grid-template-columns: 1fr 1fr;
   }
+}
+
+/* ✅ aside를 오른쪽 컬럼으로 */
+.boardSide--right{
+    grid-column: 1;
+  }
+
+/* 상단 탭 기본 */
+.boardNav--text{
+  display: flex;
+  gap: 28px;
+  margin-bottom: 40px;
+}
+
+.boardNav--text .boardNav__item{
+  font-size: 18px;
+  font-weight: 700;
+  opacity: .6;
+  padding-bottom: 6px;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+
+/* 활성화된 탭만 밑줄 */
+.boardNav--text .boardNav__item.isActive{
+  opacity: 1;
+  font-weight: 900;
+  border-bottom: 3px solid #111;
+}
+
+/* hover */
+.boardNav--text .boardNav__item:hover{
+  opacity: 1;
+}
+
+
+.boardItem--thumb{
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 18px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.boardThumb{
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #f3f3f3;
+}
+
+.boardBody{
+  min-width: 0;
+}
+
+@media (max-width: 600px){
+  .boardItem--thumb{
+    grid-template-columns: 1fr;
+  }
+  .boardThumb{
+    height: 180px;
+  }
+}
+
+/* 기본 밑줄/표시 완전 제거 */
+.boardNav__item{
+  border: none !important;
+  border-bottom: none !important;
+}
+
+/* ✅ 목록을 갤러리처럼 */
+.boardList{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* 예시처럼 2개씩 */
+  gap: 26px;
+}
+
+@media (max-width: 900px){
+  .boardList{ grid-template-columns: repeat(4, 1fr); }
+}
+/* 카드(박스 느낌 최소화) */
+.postCard{
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 썸네일 */
+.postThumb{
+  width: 25%;
+  aspect-ratio: 1 / 1;   /* ✅ 정사각형 */
+  background: #f3f3f3;
+  overflow: hidden;
+}
+
+.postThumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 아래 텍스트 라인 */
+.postMeta{
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.postTag{
+  color: #0a58ff;      /* 링크처럼 보이는 파란색 */
+  font-weight: 700;
+}
+
+.postDate{
+  color: var(--muted);
+}
+
+.postTitle{
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+/* 호버: 예시처럼 '텍스트 링크 느낌' */
+.postCard:hover .postTitle{
+  text-decoration: underline;
+}
+.postCard:hover .postThumb{
+  border-color: rgba(0,0,0,0.18);
+}
+
+/* 상단 탭 박스 스타일 완전 제거 */
+.boardNav__item{
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* 상단 탭 기본 */
+.boardNav--text{
+  display: flex;
+  gap: 28px;
+  margin-bottom: 40px;
+}
+
+.boardNav--text .boardNav__item{
+  position: relative;
+  font-size: 18px;
+  font-weight: 700;
+  opacity: .6;
+  cursor: pointer;
+  padding-bottom: 6px;
+}
+
+/* 기본에는 밑줄 없음 */
+.boardNav--text .boardNav__item::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 3px;
+  background: #111;
+  transition: width .25s ease;
+}
+
+/* 활성 탭만 밑줄 보이게 */
+.boardNav--text .boardNav__item.isActive{
+  opacity: 1;
+  font-weight: 900;
+}
+
+.boardNav--text .boardNav__item.isActive::after{
+  width: 100%;
+}
+
+/* hover 시 살짝 보이게 */
+.boardNav--text .boardNav__item:hover{
+  opacity: 1;
 }
