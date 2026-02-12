@@ -628,3 +628,282 @@ a{ color:inherit; text-decoration:none; }
   width: 100%;
   height: 100%;
 }
+
+/* ===== 공지/주보(게시판) 레이아웃 ===== */
+.board-page{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 16px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+}
+
+.board-sidebar{
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 16px;
+  background: #fff;
+}
+
+.board-sidebar__title{
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.board-nav{
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.board-nav__item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  border: 1px solid rgba(0,0,0,0.10);
+  color: inherit;
+  background: #fff;
+}
+
+.board-nav__item.is-active{
+  border-color: rgba(0,0,0,0.18);
+  font-weight: 800;
+}
+
+.board-actions{
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.board-actions__btn{
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px dashed rgba(0,0,0,0.20);
+  text-decoration: none;
+  color: inherit;
+  font-weight: 700;
+  background: rgba(0,0,0,0.02);
+}
+
+.board-help{
+  margin-top: 12px;
+  font-size: 12px;
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
+.board-content{
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 16px;
+  background: #fff;
+}
+
+.board-header{
+  padding: 6px 4px 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  margin-bottom: 14px;
+}
+
+.board-header__title{
+  font-size: 22px;
+  margin: 0;
+}
+
+.board-header__desc{
+  margin: 6px 0 0;
+  opacity: 0.75;
+}
+
+.board-list{
+  display: grid;
+  gap: 10px;
+}
+
+.board-list.is-hidden{ display:none; }
+
+.board-card{
+  display: block;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.10);
+  text-decoration: none;
+  color: inherit;
+}
+
+.board-card__meta{
+  font-size: 12px;
+  opacity: 0.7;
+  margin-bottom: 6px;
+}
+
+.board-card__title{
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.board-card__excerpt{
+  font-size: 14px;
+  opacity: 0.85;
+  line-height: 1.45;
+}
+
+/* ===== 모바일: 사이드바를 위로, 탭+버튼을 가로로 ===== */
+@media (max-width: 860px){
+  .board-page{
+    grid-template-columns: 1fr;
+  }
+  .board-sidebar{
+    display: grid;
+    gap: 12px;
+  }
+  .board-nav{
+    grid-template-columns: 1fr 1fr;
+  }
+  .board-actions{
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 420px){
+  .board-page{ padding: 18px 12px; }
+  .board-nav__item, .board-actions__btn{
+    padding: 10px 10px;
+    border-radius: 12px;
+  }
+}
+
+/* ===== 공지/주보 게시판 레이아웃 (기존 스타일 톤 유지용) ===== */
+.noticeHero .subHero__bg{
+  /* contactHero처럼 배경을 따로 주고 싶으면 여기에서만 덮어쓰기 가능 */
+}
+
+/* 2열: 좌측 사이드 + 우측 리스트 */
+.boardGrid{
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.boardSide{
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 14px;
+  padding: 16px;
+  background: #fff;
+}
+
+.boardSide__title{
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.boardNav{
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.boardNav__item{
+  display: block;
+  padding: 12px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(0,0,0,0.02);
+}
+
+.boardNav__item.isActive{
+  background: #fff;
+  font-weight: 800;
+  border-color: rgba(0,0,0,0.18);
+}
+
+.boardActions{
+  display: grid;
+  gap: 10px;
+}
+
+.boardActions__btn{
+  width: 100%;
+  justify-content: center;
+}
+
+.boardMain{
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 14px;
+  padding: 16px;
+  background: #fff;
+}
+
+.boardHead{
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.boardHead h2{
+  margin: 0 0 6px;
+}
+
+.boardHead p{
+  margin: 0;
+  opacity: 0.75;
+}
+
+.boardList{
+  display: grid;
+  gap: 10px;
+}
+
+.boardList.isHidden{ display:none; }
+
+.boardItem{
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+}
+
+.boardItem__meta{
+  font-size: 12px;
+  opacity: 0.7;
+  margin-bottom: 6px;
+}
+
+.boardItem__title{
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.boardItem__desc{
+  opacity: 0.85;
+  line-height: 1.45;
+}
+
+/* ===== 반응형: 모바일에서는 사이드바가 위로 올라가고 메뉴/버튼이 2칸 ===== */
+@media (max-width: 860px){
+  .boardGrid{
+    grid-template-columns: 1fr;
+  }
+  .boardNav{
+    grid-template-columns: 1fr 1fr;
+  }
+  .boardActions{
+    grid-template-columns: 1fr 1fr;
+  }
+}

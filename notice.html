@@ -1,0 +1,110 @@
+<!-- notice.html -->
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>공지 · 주보</title>
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+
+<body>
+  <!-- ✅ 기존 header가 있으면 그대로 두기 -->
+
+  <main class="board-page">
+    <aside class="board-sidebar">
+      <div class="board-sidebar__title">게시판</div>
+
+      <nav class="board-nav" aria-label="공지/주보 메뉴">
+        <a class="board-nav__item is-active" href="#notice" data-tab="notice">공지</a>
+        <a class="board-nav__item" href="#bulletin" data-tab="bulletin">주보</a>
+      </nav>
+
+      <div class="board-actions">
+        <a class="board-actions__btn" href="#notice" data-action="add-notice">+ 교회소식</a>
+        <a class="board-actions__btn" href="#bulletin" data-action="add-bulletin">+ 주보</a>
+      </div>
+
+      <div class="board-help">
+        * “+” 버튼은 업로드/작성 링크로 연결해두면 좋아요.
+      </div>
+    </aside>
+
+    <section class="board-content">
+      <header class="board-header">
+        <h1 class="board-header__title" id="boardTitle">공지</h1>
+        <p class="board-header__desc" id="boardDesc">교회 소식과 공지를 확인하세요.</p>
+      </header>
+
+      <!-- 공지 리스트 -->
+      <div class="board-list" data-pane="notice">
+        <a class="board-card" href="#">
+          <div class="board-card__meta">2026-02-12 · 교역자실</div>
+          <div class="board-card__title">새가족 교육 안내</div>
+          <div class="board-card__excerpt">이번 주 새가족 교육은 예배 후 2층에서 진행됩니다.</div>
+        </a>
+        <a class="board-card" href="#">
+          <div class="board-card__meta">2026-02-09 · 행정</div>
+          <div class="board-card__title">주차 안내</div>
+          <div class="board-card__excerpt">예배 시간 혼잡 구간 안내드립니다.</div>
+        </a>
+      </div>
+
+      <!-- 주보 리스트 -->
+      <div class="board-list is-hidden" data-pane="bulletin">
+        <a class="board-card" href="#">
+          <div class="board-card__meta">2026-02-09 · PDF</div>
+          <div class="board-card__title">2/9 주보</div>
+          <div class="board-card__excerpt">주일 예배 순서 및 광고를 확인하세요.</div>
+        </a>
+        <a class="board-card" href="#">
+          <div class="board-card__meta">2026-02-02 · PDF</div>
+          <div class="board-card__title">2/2 주보</div>
+          <div class="board-card__excerpt">주일 예배 순서 및 광고를 확인하세요.</div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ✅ 기존 footer가 있으면 그대로 두기 -->
+
+  <script src="./assets/js/main.js"></script>
+
+  <!-- 페이지 전용 스크립트(간단 탭 전환) -->
+  <script>
+    (function () {
+      const navItems = document.querySelectorAll(".board-nav__item");
+      const panes = document.querySelectorAll(".board-list");
+      const titleEl = document.getElementById("boardTitle");
+      const descEl = document.getElementById("boardDesc");
+
+      const meta = {
+        notice: { title: "공지", desc: "교회 소식과 공지를 확인하세요." },
+        bulletin: { title: "주보", desc: "주보(PDF/이미지)와 예배 안내를 확인하세요." },
+      };
+
+      function setTab(tab) {
+        navItems.forEach(a => a.classList.toggle("is-active", a.dataset.tab === tab));
+        panes.forEach(p => p.classList.toggle("is-hidden", p.dataset.pane !== tab));
+        titleEl.textContent = meta[tab]?.title ?? "게시판";
+        descEl.textContent = meta[tab]?.desc ?? "";
+      }
+
+      function fromHash() {
+        const tab = (location.hash || "#notice").replace("#", "");
+        setTab(tab === "bulletin" ? "bulletin" : "notice");
+      }
+
+      navItems.forEach(a => {
+        a.addEventListener("click", (e) => {
+          // 기본 hash 이동은 그대로 두고, UI만 즉시 반영
+          setTab(a.dataset.tab);
+        });
+      });
+
+      window.addEventListener("hashchange", fromHash);
+      fromHash();
+    })();
+  </script>
+</body>
+</html>
