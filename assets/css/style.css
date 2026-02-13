@@ -1096,3 +1096,8 @@ a{ color:inherit; text-decoration:none; }
     gap: 20px;
   }
 }
+
+.noticeDetail {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
