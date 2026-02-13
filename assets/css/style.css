@@ -1031,3 +1031,68 @@ a{ color:inherit; text-decoration:none; }
 .boardNav--text .boardNav__item:hover{
   opacity: 1;
 }
+
+/* ===== 서브페이지 히어로 (about 전용) ===== */
+.hero--sub{
+  height: 40vh;
+  min-height: 260px;
+}
+
+.hero--sub .hero__content h2{
+  font-size: 28px;
+}
+
+.hero--sub .hero__content p{
+  font-size: 14px;
+}
+
+/* ===== about 페이지 전용 로고 크기 조절 ===== */
+.header--sub .logo{
+  font-size: 14px;
+}
+
+/* 교회소개 히어로 이미지 */
+.aboutHero .subHero__bg{
+  background-image: url("../img/church-hero.jpg"); /* 원하는 이미지로 변경 가능 */
+  background-position: center 30%;
+}
+
+/* ===== 담임목사 인사말 레이아웃 ===== */
+.pastorWrap{
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.pastorPhoto img{
+  width: 100%;
+  border-radius: 18px;
+  object-fit: cover;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.pastorMessage h2{
+  margin-top: 0;
+  font-size: 22px;
+}
+
+.pastorMessage p{
+  margin: 12px 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.pastorName{
+  margin-top: 16px;
+  font-weight: 700;
+  color: #111;
+}
+
+/* 모바일 */
+@media (max-width: 800px){
+  .pastorWrap{
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
