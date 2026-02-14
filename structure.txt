@@ -1,0 +1,48 @@
+폴더 PATH의 목록입니다.
+볼륨 일련 번호는 D623-DEE7입니다.
+C:.
+│  about.html
+│  contact.html
+│  etlify.toml
+│  index.html
+│  info.md
+│  notice.html
+│  structure.txt
+│  worship.html
+│  
+├─assets
+│  ├─bulletins
+│  │      2026-02-09.pdf
+│  │      주보pdf넣는곳.txt
+│  │      
+│  ├─css
+│  │      style.css
+│  │      
+│  ├─img
+│  │  │  church-hero.jpg
+│  │  │  contact-hero.jpg
+│  │  │  hero.jpg
+│  │  │  notice-hero.jpg
+│  │  │  pastor.jpg
+│  │  │  worship-hero.jpg
+│  │  │  
+│  │  ├─bulletins
+│  │  │      2026-02-09.jpg
+│  │  │      주보표지사진넣는곳.txt
+│  │  │      
+│  │  └─notice
+│  │          2026-02-12.jpg
+│  │          공지표지사진넣는곳.txt
+│  │          
+│  └─js
+│          main.js
+│          
+├─netlify
+│  └─functions
+│          geocode.js
+│          map-by-address.js
+│          static-map.js
+│          
+└─notices
+        notice-1.html
+        

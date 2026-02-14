@@ -1101,3 +1101,348 @@ a{ color:inherit; text-decoration:none; }
   overflow-y: scroll;
   scrollbar-gutter: stable;
 }
+
+/* 예배 안내 링크 섹션 */
+.worship-link-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.worship-text h2 {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.worship-text p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* 공지/주보 요약 섹션 */
+.updates-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+}
+
+.updates-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.updates-head h2 {
+  font-size: 26px;
+  margin: 0;
+}
+
+.updates-more {
+  font-size: 14px;
+  text-decoration: none;
+  color: #333;
+}
+
+.updates-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.updates-list li {
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.updates-list li:last-child {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+
+.updates-list a {
+  display: block;
+  padding: 12px 0;
+  text-decoration: none;
+  color: #111;
+  font-size: 15px;
+}
+
+.updates-list a:hover {
+  text-decoration: underline;
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+  .updates-grid {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+}
+
+/* 오시는 길 링크 섹션 */
+.visit-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding: 30px 0;     /* 좌우 패딩 제거 */
+  border: none;        /* 테두리 제거 */
+  border-bottom: 1px solid #ddd;
+
+  text-decoration: none;
+  color: inherit;
+
+  transition: opacity 0.2s ease;
+}
+
+.visit-box:hover {
+  opacity: 0.7;
+}
+
+
+.visit-text h2 {
+  font-size: 26px;
+  margin: 0 0 10px;
+}
+
+.visit-text p {
+  margin: 0;
+  font-size: 15px;
+  color: #555;
+}
+
+.visit-cta {
+  font-size: 14px;
+  color: #111;
+  white-space: nowrap;
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+  .visit-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .visit-cta {
+    margin-top: 10px;
+  }
+}
+
+/* 섹션 자체는 배경 제거 (래퍼가 배경 담당) */
+.worship-link,
+.updates {
+  background: transparent;
+}
+
+/* 섹션 간 간격 */
+.worship-link { padding: 40px 0; }
+.updates { padding: 50px 0 30px; }
+
+/* 개별 섹션 배경 제거 */
+.worship-link,
+.updates,
+.visit {
+  background: transparent;
+}
+
+/* 간격 정리 */
+.worship-link { padding: 50px 0; }
+.updates { padding: 60px 0; }
+.visit { padding: 60px 0 20px; }
+
+.worship-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding: 26px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+
+  text-decoration: none;
+  color: inherit;
+
+  transition: opacity 0.2s ease;
+}
+
+.worship-box:hover {
+  opacity: 0.7;
+}
+
+.worship-text h2 {
+  font-size: 28px;
+  margin: 0 0 8px;
+}
+
+.worship-text p {
+  margin: 0;
+  font-size: 15px;
+  color: #555;
+}
+
+.worship-cta {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* =========================
+   메인 3섹션 통합 배경 (이미지 1장)
+========================= */
+.main-paper-bg {
+  padding: 90px 0 110px;
+  background:
+    linear-gradient(rgba(245,242,235,0.94), rgba(245,242,235,0.94)),
+    url("../img/water-bg.png") center 20% / 1500px no-repeat;
+}
+
+/* 개별 섹션은 배경 제거 */
+.worship-link,
+.updates,
+.visit {
+  background: transparent;
+}
+
+/* 섹션 간격 */
+.worship-link { padding: 40px 0; }
+.updates { padding: 50px 0; }
+.visit { padding: 50px 0 10px; }
+
+/* =========================
+   예배 안내 (라인형)
+========================= */
+.worship-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding: 26px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+
+  text-decoration: none;
+  color: inherit;
+  transition: opacity .2s ease;
+}
+
+.worship-box:hover { opacity: .7; }
+
+.worship-text h2 {
+  font-size: 26px;
+  margin: 0 0 6px;
+}
+
+.worship-text p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.worship-cta {
+  font-size: 14px;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+  padding-bottom: 2px;
+}
+
+/* =========================
+   공지 / 주보
+========================= */
+.updates-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+}
+
+.updates-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 16px;
+}
+
+.updates-head h2 {
+  font-size: 22px;
+  margin: 0;
+}
+
+.updates-more {
+  font-size: 13px;
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+
+.updates-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.updates-list li {
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
+
+.updates-list li:last-child {
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+}
+
+.updates-list a {
+  display: block;
+  padding: 12px 0;
+  font-size: 15px;
+  transition: transform .15s ease;
+}
+
+.updates-list a:hover {
+  transform: translateX(3px);
+}
+
+/* =========================
+   오시는 길 (예배와 통일)
+========================= */
+.visit-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 26px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+
+  text-decoration: none;
+  color: inherit;
+  transition: opacity .2s ease;
+}
+
+.visit-box:hover { opacity: .7; }
+
+.visit-text h2 {
+  font-size: 26px;
+  margin: 0 0 6px;
+}
+
+.visit-text p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.visit-cta {
+  font-size: 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+  padding-bottom: 2px;
+}
+
+/* 모바일 */
+@media (max-width: 768px){
+  .updates-grid { grid-template-columns: 1fr; }
+
+  .worship-box,
+  .visit-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .worship-cta,
+  .visit-cta {
+    margin-top: 10px;
+  }
+}
