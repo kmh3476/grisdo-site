@@ -1620,3 +1620,89 @@ a{ color:inherit; text-decoration:none; }
   background: #111;
   color: #fff;
 }
+
+/* =========================
+   MOBILE HAMBURGER NAV
+========================= */
+
+/* 기본: 햄버거/모바일 메뉴 숨김 (데스크탑) */
+.navToggle { display: none; }
+.navMobile { display: none; }
+
+/* 데스크탑 메뉴(기본) */
+.nav--desktop { display: flex; }
+
+@media (max-width: 860px){
+
+  /* ✅ 모바일에서는 데스크탑 nav를 확실히 숨김 */
+  .header .nav--desktop{ display: none !important; }
+
+  /* ✅ 햄버거 버튼 */
+  .navToggle {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 44px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+
+    border: none;          /* 박스 제거 */
+    background: none;      /* 박스 제거 */
+    padding: 0;
+    cursor: pointer;
+  }
+
+  /* 햄버거 라인 */
+  .navToggle__bar{
+    width: 18px;
+    height: 2px;
+    background: #fff;      /* 히어로 위에서는 흰색 */
+    border-radius: 999px;
+    transition: transform .2s ease, opacity .2s ease;
+  }
+
+  /* 스크롤 내려서 헤더가 흰 배경이면 햄버거 라인은 검정 */
+  .header.is-scrolled .navToggle__bar{ background:#111; }
+
+  /* ✅ 모바일 메뉴 패널 */
+  .navMobile{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    padding: 10px 16px 16px;
+    display: none; /* 기본 닫힘 */
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .navMobile a{
+    display: block;
+    padding: 14px 12px;
+    border-radius: 14px;
+    font-weight: 700;
+    color: #111;
+  }
+  .navMobile a:hover{
+    background:#111;
+    color:#fff;
+  }
+
+  /* ✅ 열림 */
+  .header.is-menu-open .navMobile{ display: block; }
+
+  /* ✅ X 애니메이션 */
+  .header.is-menu-open .navToggle__bar:nth-child(1){
+    transform: translateY(8px) rotate(45deg);
+  }
+  .header.is-menu-open .navToggle__bar:nth-child(2){
+    opacity: 0;
+  }
+  .header.is-menu-open .navToggle__bar:nth-child(3){
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}
+

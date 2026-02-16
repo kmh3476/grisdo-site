@@ -33,3 +33,46 @@ window.addEventListener("scroll", () => {
     header.classList.remove("is-scrolled");
   }
 });
+
+// ✅ 모바일 햄버거 메뉴 토글
+document.addEventListener("DOMContentLoaded", () => {
+  const header = document.querySelector(".header");
+  const btn = document.querySelector(".navToggle");
+  const mobileNav = document.querySelector(".navMobile");
+
+  if (!header || !btn || !mobileNav) return;
+
+  const closeMenu = () => {
+    header.classList.remove("is-menu-open");
+    btn.setAttribute("aria-expanded", "false");
+    btn.setAttribute("aria-label", "메뉴 열기");
+  };
+
+  const openMenu = () => {
+    header.classList.add("is-menu-open");
+    btn.setAttribute("aria-expanded", "true");
+    btn.setAttribute("aria-label", "메뉴 닫기");
+  };
+
+  btn.addEventListener("click", () => {
+    const isOpen = header.classList.contains("is-menu-open");
+    isOpen ? closeMenu() : openMenu();
+  });
+
+  // ✅ 메뉴 클릭 시 자동 닫힘
+  mobileNav.addEventListener("click", (e) => {
+    if (e.target.closest("a")) closeMenu();
+  });
+
+  // ✅ 바깥 클릭 시 닫힘
+  document.addEventListener("click", (e) => {
+    if (!header.classList.contains("is-menu-open")) return;
+    if (e.target.closest(".header")) return;
+    closeMenu();
+  });
+
+  // ✅ 화면이 다시 커지면(데스크탑) 메뉴 상태 정리
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 860) closeMenu();
+  });
+});

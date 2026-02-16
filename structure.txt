@@ -24,6 +24,7 @@ C:.
 ¦¢  ¦¢  ¦¢  hero.jpg
 ¦¢  ¦¢  ¦¢  notice-hero.jpg
 ¦¢  ¦¢  ¦¢  pastor.jpg
+¦¢  ¦¢  ¦¢  water-bg.png
 ¦¢  ¦¢  ¦¢  worship-hero.jpg
 ¦¢  ¦¢  ¦¢  
 ¦¢  ¦¢  ¦§¦¡bulletins
