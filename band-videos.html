@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>밴드 영상 | 서대구감리교회</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    .bandVideosHead{ padding: 110px 0 20px; }
+    .bandForm{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .bandInput{
+      width: min(520px, 100%);
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-size: 14px;
+    }
+    .bandList{ display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:14px; }
+    .bandVidCard{ background:#fff; border:1px solid var(--line); border-radius:16px; overflow:hidden; box-shadow: 0 6px 20px rgba(0,0,0,.04); }
+    .bandVidThumb{ width:100%; aspect-ratio: 16/9; background:#f3f3f3; object-fit:cover; display:block; }
+    .bandVidBody{ padding:14px; }
+    .bandVidMeta{ font-size:12px; color: var(--muted); margin-bottom:8px; }
+    .bandVidText{ font-size:14px; line-height:1.45; }
+    .hint{ color: var(--muted); font-size: 13px; margin-top: 10px; }
+
+    @media (max-width: 900px){ .bandList{ grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px){ .bandList{ grid-template-columns: 1fr; } .bandVideosHead{ padding-top: 90px; } }
+  </style>
+</head>
+<body>
+
+  <!-- 헤더는 기존 페이지와 동일하게(햄버거 포함) -->
+  <header class="header">
+    <div class="container headerRow">
+      <a class="logo" href="/">서대구감리교회</a>
+
+      <button class="navToggle" type="button" aria-label="메뉴 열기" aria-expanded="false">
+        <span class="navToggle__bar"></span>
+        <span class="navToggle__bar"></span>
+        <span class="navToggle__bar"></span>
+      </button>
+
+      <nav class="nav nav--desktop">
+        <a href="about.html">교회소개</a>
+        <a href="worship.html">예배안내</a>
+        <a href="notice.html">공지/주보</a>
+        <a href="contact.html">오시는길</a>
+      </nav>
+    </div>
+
+    <nav class="navMobile" aria-label="모바일 메뉴">
+      <a href="about.html">교회소개</a>
+      <a href="worship.html">예배안내</a>
+      <a href="notice.html">공지/주보</a>
+      <a href="contact.html">오시는길</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="bandVideosHead">
+      <div class="container">
+        <h1 style="margin:0 0 10px; font-size:32px; letter-spacing:-1px;">밴드 영상</h1>
+        <p style="margin:0 0 14px; color:var(--muted);">비공개 밴드에 올라온 “영상 포함 게시물(썸네일 기준)”을 가져와서 보여줍니다.</p>
+
+        <form class="bandForm" id="bandForm">
+          <input class="bandInput" id="bandKey" placeholder="band_key 입력 (예: 4u4i3333)" />
+          <button class="btn" type="submit">불러오기</button>
+        </form>
+        <div class="hint">※ band_key는 API의 Get Bands로 확인할 수 있어요. :contentReference[oaicite:5]{index=5}</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div id="status" class="hint"></div>
+        <div id="list" class="bandList"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 서대구감리교회. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    const form = document.getElementById("bandForm");
+    const bandKeyEl = document.getElementById("bandKey");
+    const statusEl = document.getElementById("status");
+    const listEl = document.getElementById("list");
+
+    function fmtDate(ms){
+      try{
+        const d = new Date(ms);
+        return d.toLocaleString("ko-KR");
+      }catch{ return ""; }
+    }
+
+    function escapeHtml(s=""){
+      return s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+    }
+
+    function render(items){
+      listEl.innerHTML = items.map(p => `
+        <article class="bandVidCard">
+          ${p.video_thumbnail_url ? `<img class="bandVidThumb" src="${p.video_thumbnail_url}" alt="영상 썸네일" />` : ""}
+          <div class="bandVidBody">
+            <div class="bandVidMeta">${escapeHtml(p.author_name || "")} · ${fmtDate(p.created_at)}</div>
+            <div class="bandVidText">${escapeHtml((p.content || "").slice(0, 140))}${(p.content || "").length > 140 ? "…" : ""}</div>
+            <div class="hint" style="margin-top:10px;">post_key: ${escapeHtml(p.post_key || "")}</div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const band_key = (bandKeyEl.value || "").trim();
+      if(!band_key){
+        statusEl.textContent = "band_key를 입력해 주세요.";
+        return;
+      }
+
+      statusEl.textContent = "불러오는 중…";
+      listEl.innerHTML = "";
+
+      try{
+        const res = await fetch(`/.netlify/functions/band-videos?band_key=${encodeURIComponent(band_key)}&locale=ko_KR`);
+        const data = await res.json();
+
+        if(!res.ok){
+          statusEl.textContent = "불러오기 실패(함수/토큰/권한 확인).";
+          console.log(data);
+          return;
+        }
+
+        statusEl.textContent = `${data.count}개 영상 게시물을 찾았어요.`;
+        render(data.items || []);
+      }catch(err){
+        statusEl.textContent = "네트워크 오류가 발생했어요.";
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
