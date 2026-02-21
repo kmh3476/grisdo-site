@@ -1,15 +1,32 @@
 폴더 PATH의 목록입니다.
 볼륨 일련 번호는 D623-DEE7입니다.
 C:.
+│  .gitignore
 │  about.html
+│  band-videos.html
 │  contact.html
 │  etlify.toml
 │  index.html
 │  info.md
 │  notice.html
+│  privacy.html
 │  structure.txt
 │  worship.html
 │  
+├─.netlify
+│  │  state.json
+│  │  
+│  ├─blobs-serve
+│  ├─functions-internal
+│  ├─functions-serve
+│  │  └─static-map
+│  │          static-map.cjs
+│  │          ___netlify-bootstrap.mjs
+│  │          ___netlify-entry-point.mjs
+│  │          ___netlify-telemetry.mjs
+│  │          
+│  └─v1
+│      └─functions
 ├─assets
 │  ├─bulletins
 │  │      2026-02-09.pdf
@@ -40,6 +57,7 @@ C:.
 │          
 ├─netlify
 │  └─functions
+│          band-videos.js
 │          geocode.js
 │          map-by-address.js
 │          static-map.js
