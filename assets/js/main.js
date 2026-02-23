@@ -76,3 +76,71 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.innerWidth > 860) closeMenu();
   });
 });
+
+// ===== HERO Crossfade Slider (페이드) =====
+document.addEventListener("DOMContentLoaded", () => {
+  const images = [
+    "assets/img/hero.jpg",
+    "assets/img/hero2.jpg",
+  ];
+
+  const a = document.getElementById("heroBgA");
+  const b = document.getElementById("heroBgB");
+
+  if (!a || !b) {
+    console.warn("heroBgA/heroBgB 요소 없음. index.html hero 구조 확인!");
+    return;
+  }
+
+  // ✅ 프리로드(깜빡임 방지)
+  images.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+  });
+
+  let idx = 0;
+  let showingA = true;
+
+  // ✅ 두 레이어 모두 초기 이미지로 채움 (중요!)
+  a.style.backgroundImage = `url("${images[0]}")`;
+  b.style.backgroundImage = `url("${images[0]}")`;
+  a.classList.add("is-active");
+  b.classList.remove("is-active");
+
+  function applyPerImageClass(el, imgPath) {
+  el.classList.remove("is-hero1", "is-hero2");
+
+  if (imgPath.includes("hero.jpg")) {
+    el.classList.add("is-hero1");
+  }
+
+  if (imgPath.includes("hero2.jpg")) {
+    el.classList.add("is-hero2");
+  }
+}
+
+  // 초기 이미지 클래스도 맞춰줌(선택)
+  applyPerImageClass(a, images[0]);
+  applyPerImageClass(b, images[0]);
+
+  function next() {
+    const nextIdx = (idx + 1) % images.length;
+    const nextSrc = images[nextIdx];
+
+    const incoming = showingA ? b : a;
+    const outgoing = showingA ? a : b;
+
+    // ✅ 먼저 이미지/클래스 세팅
+    incoming.style.backgroundImage = `url("${nextSrc}")`;
+    applyPerImageClass(incoming, nextSrc);
+
+    // ✅ 페이드
+    incoming.classList.add("is-active");
+    outgoing.classList.remove("is-active");
+
+    idx = nextIdx;
+    showingA = !showingA;
+  }
+
+  setInterval(next, 6000);
+});

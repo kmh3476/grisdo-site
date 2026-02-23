@@ -50,29 +50,6 @@ a{ color:inherit; text-decoration:none; }
   border-bottom: none;      /* 기존 border-bottom 무력화 */
 }
 
-/* 배경 이미지 레이어 */
-.hero__bg{
-  position: absolute;
-  inset: 0;
-  background-image: url("../img/hero.jpg"); /* assets/img/hero.jpg */
-  background-size: cover;
-  background-position: center -30%;
-  transform: scale(1.03);
-}
-
-/* 어두운 오버레이(텍스트 잘 보이게) */
-.hero__bg::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background: linear-gradient(
-    90deg,
-    rgba(0,0,0,0.65) 0%,
-    rgba(0,0,0,0.35) 45%,
-    rgba(0,0,0,0.05) 100%
-  );
-}
-
 /* 글씨 컨텐츠 */
 .hero__content{
   position: relative;
@@ -1959,5 +1936,82 @@ a{ color:inherit; text-decoration:none; }
 @media (max-width: 768px){
   .hero .hero__content .hero__kicker{
     transform: translateX(2px);
+  }
+}
+
+/* ===== HERO Crossfade (2-layer) ===== */
+.hero__bgWrap{
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__bgLayer{
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center -30%;
+  transform: scale(1.03);
+
+  opacity: 0;
+  transition: opacity 1.2s ease; /* 페이드 속도 */
+}
+
+.hero__bgLayer.is-active{
+  opacity: 1;
+}
+
+/* 오버레이 (기존 hero__bg::after 역할) */
+.hero__bgLayer::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,0.65) 0%,
+    rgba(0,0,0,0.35) 45%,
+    rgba(0,0,0,0.05) 100%
+  );
+}
+
+/* 텍스트는 항상 위 */
+.hero__content{
+  position: relative;
+  z-index: 1;
+}
+
+/* 모바일용 배경 조정 */
+@media (max-width: 768px){
+  .hero__bgLayer{
+    background-size: 100%;
+  }
+}
+
+.hero__bgLayer.is-hero2{
+  background-position: 50% 65%;
+  background-size: cover;
+}
+
+.hero__bgLayer.is-hero1{
+  background-position: 100% 30%;   /* 원하는 값으로 */
+  background-size: cover;
+}
+
+@media (max-width: 768px){
+  .hero__bgLayer.is-hero1{
+    background-position: 32% 10%;
+  }
+}
+
+@media (max-width: 768px){
+  .hero__bgLayer{
+    background-size: cover;
+    transform: none;
+  }
+}
+
+@media (max-width: 768px){
+  .hero__bgLayer.is-hero2{
+    background-position: 53% 10%;
   }
 }
