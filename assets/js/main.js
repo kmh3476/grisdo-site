@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// ===== HERO Crossfade Slider (페이드) =====
+// ===== HERO Crossfade Slider (페이드) + 재생/일시정지 =====
 document.addEventListener("DOMContentLoaded", () => {
   const images = [
     "assets/img/hero.jpg",
@@ -86,6 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const a = document.getElementById("heroBgA");
   const b = document.getElementById("heroBgB");
+  const btn = document.getElementById("heroToggle");
 
   if (!a || !b) {
     console.warn("heroBgA/heroBgB 요소 없음. index.html hero 구조 확인!");
@@ -93,35 +94,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ✅ 프리로드(깜빡임 방지)
-  images.forEach((src) => {
-    const img = new Image();
-    img.src = src;
-  });
+  images.forEach((src) => { const img = new Image(); img.src = src; });
 
   let idx = 0;
   let showingA = true;
 
-  // ✅ 두 레이어 모두 초기 이미지로 채움 (중요!)
-  a.style.backgroundImage = `url("${images[0]}")`;
-  b.style.backgroundImage = `url("${images[0]}")`;
-  a.classList.add("is-active");
-  b.classList.remove("is-active");
+  // ✅ 타이머 제어용
+  const intervalMs = 6000;
+  let timerId = null;
+  let isPlaying = true;
 
   function applyPerImageClass(el, imgPath) {
-  el.classList.remove("is-hero1", "is-hero2");
-
-  if (imgPath.includes("hero.jpg")) {
-    el.classList.add("is-hero1");
+    el.classList.remove("is-hero1", "is-hero2");
+    if (imgPath.includes("hero2.jpg")) el.classList.add("is-hero2");
+    else el.classList.add("is-hero1");
   }
 
-  if (imgPath.includes("hero2.jpg")) {
-    el.classList.add("is-hero2");
-  }
-}
-
-  // 초기 이미지 클래스도 맞춰줌(선택)
+  // ✅ 두 레이어 모두 초기 이미지로 채움
+  a.style.backgroundImage = `url("${images[0]}")`;
+  b.style.backgroundImage = `url("${images[0]}")`;
   applyPerImageClass(a, images[0]);
   applyPerImageClass(b, images[0]);
+
+  a.classList.add("is-active");
+  b.classList.remove("is-active");
 
   function next() {
     const nextIdx = (idx + 1) % images.length;
@@ -130,11 +126,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const incoming = showingA ? b : a;
     const outgoing = showingA ? a : b;
 
-    // ✅ 먼저 이미지/클래스 세팅
     incoming.style.backgroundImage = `url("${nextSrc}")`;
     applyPerImageClass(incoming, nextSrc);
 
-    // ✅ 페이드
     incoming.classList.add("is-active");
     outgoing.classList.remove("is-active");
 
@@ -142,5 +136,42 @@ document.addEventListener("DOMContentLoaded", () => {
     showingA = !showingA;
   }
 
-  setInterval(next, 6000);
+  function start() {
+    if (timerId) return;
+    timerId = setInterval(next, intervalMs);
+    isPlaying = true;
+    if (btn) {
+      btn.setAttribute("aria-pressed", "false");
+      btn.querySelector(".heroCtrl__icon").textContent = "⏸";
+      btn.querySelector(".heroCtrl__label").textContent = "일시정지";
+    }
+  }
+
+  function stop() {
+    if (!timerId) return;
+    clearInterval(timerId);
+    timerId = null;
+    isPlaying = false;
+    if (btn) {
+      btn.setAttribute("aria-pressed", "true");
+      btn.querySelector(".heroCtrl__icon").textContent = "▶";
+      btn.querySelector(".heroCtrl__label").textContent = "재생";
+    }
+  }
+
+  // ✅ 버튼 토글
+  if (btn) {
+    btn.addEventListener("click", () => {
+      isPlaying ? stop() : start();
+    });
+  }
+
+  // ✅ 처음 자동 재생
+  start();
+
+  // (선택) 탭이 숨겨지면 자동 정지, 다시 보이면 자동 재생
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stop();
+    else start();
+  });
 });
