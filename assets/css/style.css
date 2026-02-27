@@ -2124,3 +2124,24 @@ a{ color:inherit; text-decoration:none; }
   filter: none !important;
 }
 
+/* 아이콘 영역 */
+.heroCtrl__icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* SVG 기본 */
+.heroCtrl .ico{
+  width: 16px;
+  height: 16px;
+  fill: currentColor;     /* ✅ 글자색 따라감 */
+  display: none;          /* 기본 숨김 */
+}
+
+/* 기본 상태: 재생중이면 'pause' 보이기 */
+.heroCtrl .ico-pause{ display: block; }
+
+/* aria-pressed="true" (=정지 상태)면 play 보이기 */
+.heroCtrl[aria-pressed="true"] .ico-play{ display:block; }
+.heroCtrl[aria-pressed="true"] .ico-pause{ display:none; }

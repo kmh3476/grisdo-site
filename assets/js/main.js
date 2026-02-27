@@ -112,11 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function setBtnUI(playing) {
     if (!toggleBtn) return;
 
-    const iconEl = toggleBtn.querySelector(".heroCtrl__icon");
     const labelEl = toggleBtn.querySelector(".heroCtrl__label");
 
     // 요소 없으면 조용히 스킵(에러 방지)
-    if (iconEl) iconEl.textContent = playing ? "⏸" : "▶";
     if (labelEl) labelEl.textContent = playing ? "일시정지" : "재생";
 
     // pressed는 "멈춤(true)"일 때 true로 두는게 자연스러움

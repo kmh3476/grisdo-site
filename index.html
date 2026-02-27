@@ -46,8 +46,18 @@
   <div class="container hero__content">
     
     <!-- ✅ HERO 오른쪽 아래 재생/일시정지 버튼 -->
-<button class="heroCtrl" id="heroToggle" type="button" aria-pressed="false">
-  <span class="heroCtrl__icon" aria-hidden="true">⏸</span>
+<button id="heroToggle" class="heroCtrl" type="button" aria-pressed="false">
+  <span class="heroCtrl__icon" aria-hidden="true">
+    <!-- play -->
+    <svg class="ico ico-play" viewBox="0 0 24 24">
+      <path d="M8 5v14l12-7z"></path>
+    </svg>
+
+    <!-- pause -->
+    <svg class="ico ico-pause" viewBox="0 0 24 24">
+      <path d="M6 5h4v14H6zM14 5h4v14h-4z"></path>
+    </svg>
+  </span>
   <span class="heroCtrl__label">일시정지</span>
 </button>
 
