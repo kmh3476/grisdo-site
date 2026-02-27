@@ -101,7 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let timerId = null;
 
   // ✅ 유저가 '직접' 멈췄는지 기억 (탭 전환해도 유지)
-  let userPaused = false;
+  let userPaused = localStorage.getItem(STORAGE_KEY) === "1";
+  const STORAGE_KEY = "hero_userPaused"; // ✅ 상태 저장 키
 
   function applyPerImageClass(el, imgPath) {
     el.classList.remove("is-hero1", "is-hero2");
@@ -172,10 +173,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const isPlayingNow = !!timerId;
       if (isPlayingNow) {
         userPaused = true;
+        localStorage.setItem(STORAGE_KEY, "1");   // ✅ 저장(멈춤)
         stop();
       } else {
         userPaused = false;
-        start();
+        localStorage.setItem(STORAGE_KEY, "1");   // ✅ 저장(멈춤)
+        
+        if (userPaused) stop();
+        else start();
+
       }
     });
   }
