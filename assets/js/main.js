@@ -87,111 +87,92 @@ document.addEventListener("DOMContentLoaded", () => {
 // =====================================================
 // 4) ✅ HERO Crossfade Slider (2-layer fade) + 재생/일시정지
 //    + 다른 페이지 이동해도 상태 유지(localStorage)
+//    + ✅ "어느 사진에서 멈췄는지"까지 유지(localStorage)
 // =====================================================
 document.addEventListener("DOMContentLoaded", () => {
-  // -----------------------------------------
-  // ✅ (A) hero가 없는 페이지는 조용히 종료
-  // -----------------------------------------
   const a = document.getElementById("heroBgA");
   const b = document.getElementById("heroBgB");
   const toggleBtn = document.getElementById("heroToggle");
 
-  // hero 구조가 없는 페이지(about/notice/contact 등)에서는 아무 것도 안 함
+  // hero 없는 페이지는 조용히 종료
   if (!a || !b) return;
 
-  // -----------------------------------------
-  // ✅ (B) 상태 저장 키 (먼저 선언!)
-  // -----------------------------------------
-  const STORAGE_KEY = "hero_userPaused"; // "1"=유저가 멈춤, "0"(또는 null)=재생 허용
+  // ✅ 저장 키들
+  const STORAGE_PAUSED = "hero_userPaused";   // "1"=유저가 멈춤
+  const STORAGE_IDX = "hero_idx";             // "0","1"... 현재 이미지 인덱스
+  // (원하면) 레이어 상태도 저장 가능하지만, idx만 저장해도 UX는 충분히 동일하게 느껴짐
 
-  // -----------------------------------------
-  // ✅ (C) 이미지 경로: 루트/상대 자동 보정
-  //    - /assets/... 가 서브폴더 배포에서 깨질 수 있어서 방어
-  // -----------------------------------------
-  // 기본은 네가 원한 루트 경로 버전
-
-  // 현재 페이지가 루트(/index.html)인지, 서브경로인지에 따라 선택
-  // - 서브경로 배포(예: https://domain.com/church/index.html)면 상대경로가 더 안전함
-  // - 루트 배포면 /assets가 잘 먹음
   const isSubPath = (() => {
-    // pathname이 "/"나 "/index.html"이면 루트에 가깝다고 보고, 그 외는 서브경로 가능성
     const p = location.pathname || "/";
     if (p === "/" || p.endsWith("/index.html")) return false;
-    // 예: "/church/index.html" "/church/" 같은 경우
-    // 단, "/about.html" 같은 단일 파일도 루트에 있을 수 있으나,
-    // 이건 assets 접근성 판단에 큰 문제는 없어서 상대경로가 더 안전하게 동작함
     return true;
   })();
 
   const images = ["assets/img/hero.jpg", "assets/img/hero2.jpg"];
 
-  // -----------------------------------------
-  // ✅ (D) 유저 멈춤 상태 로드
-  // -----------------------------------------
-  let userPaused = localStorage.getItem(STORAGE_KEY) === "1";
+  // ✅ 유저가 멈춤 상태인지
+  let userPaused = localStorage.getItem(STORAGE_PAUSED) === "1";
 
-  // -----------------------------------------
-  // ✅ (E) 프리로드 + 로드 실패 감지(검정만 뜨는 문제 디버그)
-  // -----------------------------------------
+  // ✅ 마지막으로 보고 있던 이미지 idx 불러오기 (없으면 0)
+  const savedIdxRaw = localStorage.getItem(STORAGE_IDX);
+  let idx = Number.isFinite(Number(savedIdxRaw)) ? Number(savedIdxRaw) : 0;
+
+  // 혹시 이상한 값 들어있으면 안전하게 보정
+  if (idx < 0 || idx >= images.length) idx = 0;
+
+  // ✅ 레이어 토글 상태
+  let showingA = true;
+
+  // ✅ 프리로드 + 실패 감지(검정만 뜨는거 디버깅용)
   images.forEach((src) => {
     const img = new Image();
-    img.onload = () => {
-      // 필요하면 확인용 로그(원하면 살려도 됨)
-      // console.log("[HERO] loaded:", src);
-    };
-    img.onerror = () => {
-      console.warn("[HERO] 이미지 로드 실패:", src, " (경로/파일명/대소문자 확인)");
-    };
+    img.onerror = () => console.warn("[HERO] 이미지 로드 실패:", src, "(경로/파일명/대소문자 확인)");
     img.src = src;
   });
 
-  // -----------------------------------------
-  // ✅ (F) 상태 변수
-  // -----------------------------------------
-  let idx = 0;
-  let showingA = true;
   const intervalMs = 6000;
   let timerId = null;
 
-  // -----------------------------------------
-  // ✅ (G) per-image class 적용 (CSS에서 background-position 다르게 쓰는 용도)
-  // -----------------------------------------
   function applyPerImageClass(el, imgPath) {
     el.classList.remove("is-hero1", "is-hero2");
     if (imgPath.includes("hero2.jpg")) el.classList.add("is-hero2");
     else el.classList.add("is-hero1");
   }
 
-  // -----------------------------------------
-  // ✅ (H) 버튼 UI 업데이트 (라벨/aria-pressed)
-  //    - 너 HTML은 SVG 아이콘이 들어있지만
-  //      여기서는 라벨/aria만 확실히 맞춰줌
-  //      (SVG 토글까지 원하면 추가 가능)
-  // -----------------------------------------
   function setBtnUI(playing) {
     if (!toggleBtn) return;
 
     const labelEl = toggleBtn.querySelector(".heroCtrl__label");
     if (labelEl) labelEl.textContent = playing ? "일시정지" : "재생";
 
-    // pressed는 "멈춤(true)"일 때 true
     toggleBtn.setAttribute("aria-pressed", playing ? "false" : "true");
   }
 
-  // -----------------------------------------
-  // ✅ (I) 초기 배경 세팅 (검정 화면 방지 핵심)
-  // -----------------------------------------
-  a.style.backgroundImage = `url("${images[0]}")`;
-  b.style.backgroundImage = `url("${images[0]}")`;
-  applyPerImageClass(a, images[0]);
-  applyPerImageClass(b, images[0]);
+  // ✅ 현재 idx를 storage에 저장하는 함수
+  function saveIdx() {
+    localStorage.setItem(STORAGE_IDX, String(idx));
+  }
 
-  a.classList.add("is-active");
-  b.classList.remove("is-active");
+  // ✅ (핵심) "저장된 idx"로 처음부터 배경을 세팅
+  function initToIdx(initialIdx) {
+    const src = images[initialIdx];
 
-  // -----------------------------------------
-  // ✅ (J) 다음 이미지로 페이드 전환
-  // -----------------------------------------
+    // 두 레이어 모두 같은 이미지로 깔아두면 "검정 화면"이나 깜빡임이 줄어듦
+    a.style.backgroundImage = `url("${src}")`;
+    b.style.backgroundImage = `url("${src}")`;
+    applyPerImageClass(a, src);
+    applyPerImageClass(b, src);
+
+    // A를 활성로 시작
+    a.classList.add("is-active");
+    b.classList.remove("is-active");
+    showingA = true;
+
+    idx = initialIdx;
+    saveIdx();
+  }
+
+  // ✅ 다음 이미지로 전환
   function next() {
     const nextIdx = (idx + 1) % images.length;
     const nextSrc = images[nextIdx];
@@ -206,12 +187,10 @@ document.addEventListener("DOMContentLoaded", () => {
     outgoing.classList.remove("is-active");
 
     idx = nextIdx;
+    saveIdx();              // ✅ 전환될 때마다 저장
     showingA = !showingA;
   }
 
-  // -----------------------------------------
-  // ✅ (K) 재생/정지
-  // -----------------------------------------
   function start() {
     if (timerId) return;
     timerId = setInterval(next, intervalMs);
@@ -226,45 +205,54 @@ document.addEventListener("DOMContentLoaded", () => {
     setBtnUI(false);
   }
 
-  // -----------------------------------------
-  // ✅ (L) 버튼 클릭 토글 + localStorage 저장
-  // -----------------------------------------
+  // ✅ 버튼 클릭 토글
   if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
       const isPlayingNow = !!timerId;
 
       if (isPlayingNow) {
-        // 재생 중 -> 유저가 멈춤
+        // 재생 중 -> 멈춤
         userPaused = true;
-        localStorage.setItem(STORAGE_KEY, "1");
+        localStorage.setItem(STORAGE_PAUSED, "1");
         stop();
       } else {
-        // 멈춤 중 -> 유저가 재생
+        // 멈춤 -> 재생
         userPaused = false;
-        localStorage.setItem(STORAGE_KEY, "0");
+        localStorage.setItem(STORAGE_PAUSED, "0");
         start();
       }
     });
   }
 
-  // -----------------------------------------
-  // ✅ (M) 첫 진입 시: 저장 상태에 따라 시작/정지 결정
-  // -----------------------------------------
+  // ✅ 페이지를 떠나기 직전에 idx 저장(혹시라도 안전장치)
+  window.addEventListener("pagehide", saveIdx);
+  window.addEventListener("beforeunload", saveIdx);
+
+  // ✅ 초기 세팅: "저장된 idx"로 시작
+  initToIdx(idx);
+
+  // ✅ 처음 진입 시: 유저가 멈춰둔 상태면 그대로 멈춤, 아니면 자동 재생
   if (userPaused) stop();
   else start();
 
-  // -----------------------------------------
-  // ✅ (N) 탭 숨김/복귀: 유저가 멈춘 상태면 유지
-  // -----------------------------------------
+  // ✅ 탭 숨김/복귀 처리: 유저가 멈춘 상태면 유지
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
-      // 숨겨지면 정지(성능/배터리)
       stop();
-    } else {
-      // 복귀 시 저장값 다시 읽고 그대로 반영
-      userPaused = localStorage.getItem(STORAGE_KEY) === "1";
-      if (userPaused) stop();
-      else start();
+      return;
     }
+
+    // 복귀 시 최신 저장값 다시 읽어서 반영
+    userPaused = localStorage.getItem(STORAGE_PAUSED) === "1";
+
+    const saved = localStorage.getItem(STORAGE_IDX);
+    let resumeIdx = Number.isFinite(Number(saved)) ? Number(saved) : 0;
+    if (resumeIdx < 0 || resumeIdx >= images.length) resumeIdx = 0;
+
+    // ✅ 혹시 다른 탭/페이지에서 idx가 바뀌었으면 그 idx로 즉시 맞춰줌
+    initToIdx(resumeIdx);
+
+    if (userPaused) stop();
+    else start();
   });
 });
