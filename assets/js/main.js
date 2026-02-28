@@ -256,3 +256,52 @@ document.addEventListener("DOMContentLoaded", () => {
     else start();
   });
 });
+
+// =========================
+// LIGHTBOX (image zoom)
+// =========================
+(function () {
+  const lb = document.getElementById("lightbox");
+  if (!lb) return;
+
+  const imgEl = lb.querySelector(".lightbox__img");
+  const closeBtn = lb.querySelector(".lightbox__close");
+  const backdrop = lb.querySelector(".lightbox__backdrop");
+
+  function openLightbox(src, alt) {
+    imgEl.src = src;
+    imgEl.alt = alt || "";
+    lb.classList.add("is-open");
+    lb.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLightbox() {
+    lb.classList.remove("is-open");
+    lb.setAttribute("aria-hidden", "true");
+    imgEl.src = "";
+    document.body.style.overflow = "";
+  }
+
+  // 이미지 클릭 시 열기
+  document.addEventListener("click", (e) => {
+    const t = e.target;
+    if (!(t instanceof Element)) return;
+    const img = t.closest("img.js-lightbox");
+    if (!img) return;
+
+    e.preventDefault();
+    openLightbox(img.getAttribute("src"), img.getAttribute("alt"));
+  });
+
+  // 닫기
+  closeBtn.addEventListener("click", closeLightbox);
+  backdrop.addEventListener("click", closeLightbox);
+
+  // ESC 닫기
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && lb.classList.contains("is-open")) {
+      closeLightbox();
+    }
+  });
+})();

@@ -39,6 +39,7 @@ C:.
 ¦¢  ¦¢  ¦¢  church-hero.jpg
 ¦¢  ¦¢  ¦¢  contact-hero.jpg
 ¦¢  ¦¢  ¦¢  hero.jpg
+¦¢  ¦¢  ¦¢  hero2.jpg
 ¦¢  ¦¢  ¦¢  notice-hero.jpg
 ¦¢  ¦¢  ¦¢  pastor.jpg
 ¦¢  ¦¢  ¦¢  water-bg.png
