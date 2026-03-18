@@ -52,42 +52,96 @@
 
     <!-- GALLERY -->
     <section class="section">
-      <div class="container">
+  <div class="container">
 
-        <div class="galleryHead">
-          <h2 class="galleryTitle">최근 사진</h2>
-          <p class="galleryDesc">사진을 클릭하면 크게 볼 수 있어요.</p>
-        </div>
+    <div class="galleryHead">
+      <h2 class="galleryTitle">최근 사진</h2>
+      <p class="galleryDesc">최근 사진과 앨범을 확인해보세요.</p>
+    </div>
 
-        <div class="galleryGrid">
-          <!-- ✅ 아래 src/href는 assets/img/gallery 폴더에 맞춰서 바꿔줘 -->
-          <a class="galleryItem" href="gallery/2026-02-01.html">
-  <img src="assets/img/gallery/2026-02-01.jpg" alt="새가족 환영" loading="lazy" />
-  <div class="galleryCap">
-    <div class="galleryCap__title">새가족 환영</div>
-    <div class="galleryCap__meta">2026-02-01</div>
+    <!-- ✅ 위: 큰 사진 4장 (고정, 필터 영향 없음) -->
+    <div class="galleryFeaturedGrid" id="galleryFeaturedGrid"></div>
+
+    <!-- ✅ 아래: 작은 사진들만 필터/검색 -->
+    <div class="galleryThumbSection">
+  <div class="galleryThumbHead">
+    <h3>앨범 더보기</h3>
+    <p>사진들을 날짜순 또는 이름순으로 정렬해 볼 수 있습니다.</p>
   </div>
-</a>
 
-          <a class="galleryItem" href="assets/img/gallery/2026-02-08.jpg">
-            <img src="assets/img/gallery/2026-02-08.jpg" alt="교회 사진 2" loading="lazy" />
-            <div class="galleryCap">
-              <div class="galleryCap__title">주일예배</div>
-              <div class="galleryCap__meta">2026-02-08</div>
-            </div>
-          </a>
-
-          <a class="galleryItem" href="assets/img/gallery/2026-02-15.jpg">
-            <img src="assets/img/gallery/2026-02-15.jpg" alt="교회 사진 3" loading="lazy" />
-            <div class="galleryCap">
-              <div class="galleryCap__title">봉사/섬김</div>
-              <div class="galleryCap__meta">2026-02-15</div>
-            </div>
-          </a>
-        </div>
-
+  <div class="galleryControlWrap">
+    <div class="galleryControls" aria-label="작은 사진 정렬">
+      <div class="gallerySort">
+        <label for="gallerySort">정렬</label>
+        <select id="gallerySort">
+          <option value="new">최신순</option>
+          <option value="old">오래된순</option>
+          <option value="name">이름순</option>
+        </select>
       </div>
-    </section>
+    </div>
+
+    <div class="gallerySearch">
+      <input
+        type="text"
+        id="gallerySearch"
+        class="gallerySearch__input"
+        placeholder="작은 사진 검색"
+      />
+    </div>
+  </div>
+
+  <div class="galleryGrid galleryGrid--thumb" id="galleryThumbGrid">
+
+
+        <a class="galleryItem"
+           href="gallery/2026-03-01.html"
+           data-date="2026-03-01"
+           data-title="주일 오후예배">
+          <img src="assets/img/gallery/2026-03-01.jpg" alt="주일 오후예배" loading="lazy" />
+          <div class="galleryCap">
+            <div class="galleryCap__title">주일 오후예배</div>
+            <div class="galleryCap__meta">2026-03-01</div>
+          </div>
+        </a>
+
+        <a class="galleryItem"
+           href="gallery/2026-03-03.html"
+           data-date="2026-03-03"
+           data-title="교회 봉사">
+          <img src="assets/img/gallery/2026-03-03.jpg" alt="교회 봉사" loading="lazy" />
+          <div class="galleryCap">
+            <div class="galleryCap__title">교회 봉사</div>
+            <div class="galleryCap__meta">2026-03-03</div>
+          </div>
+        </a>
+
+        <a class="galleryItem"
+           href="gallery/2026-03-05.html"
+           data-date="2026-03-05"
+           data-title="새가족 인사">
+          <img src="assets/img/gallery/2026-03-05.jpg" alt="새가족 인사" loading="lazy" />
+          <div class="galleryCap">
+            <div class="galleryCap__title">새가족 인사</div>
+            <div class="galleryCap__meta">2026-03-05</div>
+          </div>
+        </a>
+
+        <a class="galleryItem"
+           href="gallery/2026-03-07.html"
+           data-date="2026-03-07"
+           data-title="청년부 찬양">
+          <img src="assets/img/gallery/2026-03-07.jpg" alt="청년부 찬양" loading="lazy" />
+          <div class="galleryCap">
+            <div class="galleryCap__title">청년부 찬양</div>
+            <div class="galleryCap__meta">2026-03-07</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
   </main>
 
   <!-- FOOTER (contact.html과 동일) -->

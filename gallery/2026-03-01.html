@@ -75,19 +75,17 @@
 
           <!-- 사진들 -->
           <div class="postGallery">
+
             <figure class="postPhoto">
-              <img src="../assets/img/gallery/2026-02-01.jpg" alt="새가족 환영 사진 1" loading="lazy" />
+              <div class="photoLabelOut">환영 시간</div>
+              <img class="js-lightbox" src="../assets/img/gallery/2026-03-01.jpg" alt="주일 오후예배" loading="lazy" />
             </figure>
 
             <figure class="postPhoto">
-              <img src="../assets/img/gallery/2026-02-01-2.jpg" alt="새가족 환영 사진 2" loading="lazy" />
-              <figcaption>함께 교제</figcaption>
+              <div class="photoLabelOut">함께 교제</div>
+              <img class="js-lightbox" src="../assets/img/gallery/2026-03-01-2.jpg" alt="주일 오후예배 2" loading="lazy" />
             </figure>
 
-            <figure class="postPhoto">
-              <img src="../assets/img/gallery/2026-02-01-3.jpg" alt="새가족 환영 사진 3" loading="lazy" />
-              <figcaption>단체 사진</figcaption>
-            </figure>
           </div>
         </article>
 
@@ -114,6 +112,17 @@
       </div>
     </div>
   </footer>
+
+ <!-- ✅ Lightbox -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox__backdrop"></div>
+
+  <button class="lightbox__close" type="button" aria-label="닫기">✕</button>
+
+  <div class="lightbox__stage" role="dialog" aria-modal="true">
+    <img class="lightbox__img" alt="" />
+  </div>
+</div>
 
   <script src="../assets/js/main.js"></script>
 </body>

@@ -305,3 +305,196 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 })();
+
+// =========================
+// GALLERY Filter / Sort
+// =========================
+(function() {
+  const grid = document.getElementById("galleryThumbGrid");
+  if (!grid) return;
+
+  const items = Array.from(grid.querySelectorAll(".galleryItem"));
+  const filterBtns = Array.from(document.querySelectorAll(".gFilter"));
+  const sortSelect = document.getElementById("gallerySort");
+
+  let activeFilter = "all";
+
+  function applyFilter() {
+    items.forEach((el) => {
+      const cat = el.dataset.cat || "all";
+      const show = activeFilter === "all" || cat === activeFilter;
+      el.style.display = show ? "" : "none";
+    });
+  }
+
+  function parseDate(s) {
+    // "YYYY-MM-DD"만 지원
+    const d = new Date(s + "T00:00:00");
+    return Number.isNaN(d.getTime()) ? 0 : d.getTime();
+  }
+
+  function applySort() {
+    const mode = sortSelect ? sortSelect.value : "new";
+
+    const sorted = [...items].sort((a, b) => {
+      const da = parseDate(a.dataset.date || "");
+      const db = parseDate(b.dataset.date || "");
+
+      if (mode === "old") return da - db;
+      if (mode === "title") {
+        const ta = (a.dataset.title || "").trim();
+        const tb = (b.dataset.title || "").trim();
+        return ta.localeCompare(tb, "ko");
+      }
+      // default: 최신순
+      return db - da;
+    });
+
+    // DOM 재배치
+    sorted.forEach((el) => grid.appendChild(el));
+  }
+
+  // 필터 버튼 클릭
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      filterBtns.forEach((b) => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      activeFilter = btn.dataset.filter || "all";
+      applyFilter();
+    });
+  });
+
+  // 정렬 변경
+  if (sortSelect) {
+    sortSelect.addEventListener("change", () => {
+      applySort();
+      applyFilter(); // 정렬 후에도 현재 필터 유지
+    });
+  }
+
+  // 초기 적용
+  applySort();
+  applyFilter();
+})();
+
+// =========================
+// GALLERY SORT
+// =========================
+
+(function(){
+
+const grid = document.getElementById("galleryThumbGrid");
+if(!grid) return;
+
+const items = Array.from(grid.querySelectorAll(".galleryItem"));
+const sortSelect = document.getElementById("gallerySort");
+
+function parseDate(str){
+  return new Date(str + "T00:00:00").getTime();
+}
+
+function sortGallery(mode){
+
+  const sorted = [...items].sort((a,b)=>{
+
+    const dateA = parseDate(a.dataset.date);
+    const dateB = parseDate(b.dataset.date);
+
+    const titleA = a.dataset.title;
+    const titleB = b.dataset.title;
+
+    if(mode === "old") return dateA - dateB;
+
+    if(mode === "name") return titleA.localeCompare(titleB,"ko");
+
+    return dateB - dateA; // 최신순
+  });
+
+  sorted.forEach(el=>grid.appendChild(el));
+
+}
+
+if(sortSelect){
+  sortSelect.addEventListener("change",(e)=>{
+    sortGallery(e.target.value);
+  });
+}
+
+// 기본 최신순
+sortGallery("new");
+
+})();
+
+// =========================
+// GALLERY FEATURED + SORT
+// 위 최근 사진 = 작은 카드들 중 최신 4장
+// 아래 작은 카드 = 정렬 선택대로 재배치
+// =========================
+(function () {
+  const featuredGrid = document.getElementById("galleryFeaturedGrid");
+  const thumbGrid = document.getElementById("galleryThumbGrid");
+  const sortSelect = document.getElementById("gallerySort");
+
+  if (!thumbGrid) return;
+
+  const items = Array.from(thumbGrid.querySelectorAll(".galleryItem"));
+
+  function parseDate(str) {
+    if (!str) return 0;
+    const time = new Date(str + "T00:00:00").getTime();
+    return Number.isNaN(time) ? 0 : time;
+  }
+
+  function sortItems(mode) {
+    return [...items].sort((a, b) => {
+      const dateA = parseDate(a.dataset.date || "");
+      const dateB = parseDate(b.dataset.date || "");
+      const titleA = (a.dataset.title || "").trim();
+      const titleB = (b.dataset.title || "").trim();
+
+      if (mode === "old") return dateA - dateB;
+      if (mode === "name") return titleA.localeCompare(titleB, "ko");
+
+      return dateB - dateA; // 최신순
+    });
+  }
+
+  function renderFeatured() {
+    if (!featuredGrid) return;
+
+    const newestFour = sortItems("new").slice(0, 4);
+
+    featuredGrid.innerHTML = newestFour.map((item) => {
+      const href = item.getAttribute("href") || "#";
+      const date = item.dataset.date || "";
+      const title = item.dataset.title || "";
+      const img = item.querySelector("img");
+      const src = img ? img.getAttribute("src") : "";
+      const alt = img ? img.getAttribute("alt") : title;
+
+      return `
+        <a class="galleryFeaturedItem" href="${href}">
+          <img src="${src}" alt="${alt}" loading="lazy" />
+          <div class="galleryFeaturedOverlay">
+            <div class="galleryFeaturedTitle">${title}</div>
+            <div class="galleryFeaturedMeta">${date}</div>
+          </div>
+        </a>
+      `;
+    }).join("");
+  }
+
+  function renderThumbs(mode) {
+    const sorted = sortItems(mode);
+    sorted.forEach((item) => thumbGrid.appendChild(item));
+  }
+
+  if (sortSelect) {
+    sortSelect.addEventListener("change", (e) => {
+      renderThumbs(e.target.value);
+    });
+  }
+
+  renderFeatured();    // 위 최근 사진 = 최신 4장
+  renderThumbs("new"); // 아래 작은 사진 = 기본 최신순
+})();
